@@ -1,0 +1,36 @@
+{
+  "name": "gendiff",
+  "version": "1.0.0",
+  "description": "calculator difference",
+  "bin": {
+    "gendiff": "dist/src/bin/gendiff.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/floydezus/frontend-project-lvl2.git"
+  },
+  "author": "Aleksandr Tokarev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/floydezus/frontend-project-lvl2/issues"
+  },
+  "homepage": "https://github.com/floydezus/frontend-project-lvl2#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "eslint": "^7.0.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2"
+  }
+}
