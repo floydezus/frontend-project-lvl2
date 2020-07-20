@@ -1,0 +1,9 @@
+env:  
+  node: true
+extends: airbnb-base
+rules: 
+  no-console: 0
+parser: babel-eslint
+plugins:
+# https://github.com/babel/eslint-plugin-babel
+  - babel
