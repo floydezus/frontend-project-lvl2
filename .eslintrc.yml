@@ -3,7 +3,10 @@ env:
 extends: airbnb-base
 rules: 
   no-console: 0
-parser: babel-eslint
+  import/extensions: 0
+parserOptions:
+  ecmaVersion: 11
+  sourceType: module
 plugins:
-# https://github.com/babel/eslint-plugin-babel
-  - babel
+# https://github.com/jest-community/eslint-plugin-jest
+  - jest

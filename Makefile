@@ -2,13 +2,21 @@ install: install-deps
 
 
 install-deps:
-	npm install
+	sudo npm install
 
 start:
-	npx babel-node 'src/bin/gendiff.js'
+	npx node 'src/bin/gendiff.js' -h
 
 lint:
 	npx eslint .
 
 publish:
 	npm publish --dry-run
+
+test:
+	npm test
+
+
+.PHONY: test
+
+
