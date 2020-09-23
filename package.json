@@ -3,11 +3,8 @@
   "version": "1.1.0",
   "description": "Compares two configuration files and shows a difference.",
   "bin": {
-    "gendifff": "src/bin/gendiff.js"
+    "gendiff": "bin/gendiff.js"
   },
-  "files": [
-    "dist"
-  ],
   "main": "index.js",
   "scripts": {
     "test": "npx -n --experimental-vm-modules jest --colors"
@@ -27,7 +24,7 @@
   },
   "homepage": "https://github.com/floydezus/frontend-project-lvl2#readme",
   "devDependencies": {
-    "@jest/globals": "^26.4.2",    
+    "@jest/globals": "^26.4.2",
     "eslint": "^7.5.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",

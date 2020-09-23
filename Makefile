@@ -5,10 +5,10 @@ install-deps:
 	sudo npm install
 
 start:
-	npx node 'src/bin/gendiff.js' -h
+	npx node 'bin/gendiff.js' -h
 
 lint:
-	npx eslint .
+	npx eslint . --fix
 
 publish:
 	npm publish --dry-run

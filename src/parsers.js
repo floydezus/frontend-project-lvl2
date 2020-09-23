@@ -15,6 +15,7 @@ const getParser = (extname, content) => {
   } if (extname === '.ini') {
     return ini.parse(content);
   }
+  return null;
 };
 
 const getObjFromFile = (filePath) => {

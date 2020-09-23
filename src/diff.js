@@ -12,13 +12,13 @@ const renderResultPlain = (arrayResult) => {
         return 'unchanged';
       }
       if (tree.type === 'added') {
-        tree = `Property ${parent}.${tree.name} was added with value:${val2}`;
+        return `Property ${parent}.${tree.name} was added with value:${val2}`;
       }
       if (tree.type === 'deleted') {
-        tree = `Property ${parent}.${tree.name} was removed`;
+        return `Property ${parent}.${tree.name} was removed`;
       }
       if (tree.type === 'changed') {
-        tree = `Property ${parent}.${tree.name}  was updated. From ${val1} to ${val2}`;
+        return `Property ${parent}.${tree.name}  was updated. From ${val1} to ${val2}`;
       }
       return tree;
     }
@@ -41,19 +41,19 @@ const renderResultStylish = (arrayResult) => {
     const val2 = (typeof (value.value2) === 'object') ? JSON.stringify(value.value2) : value.value2;
 
     if (value.type === 'changed') {
-      value = `- ${value.name}:${val1}\n+ ${value.name}:${val2}\n`;
+      return `- ${value.name}:${val1}\n+ ${value.name}:${val2}\n`;
     }
     if (value.type === 'unchanged') {
-      value = `  ${value.name}:${val1}\n`;
+      return `  ${value.name}:${val1}\n`;
     }
     if (value.type === 'deleted') {
-      value = `- ${value.name}:${val1}\n`;
+      return `- ${value.name}:${val1}\n`;
     }
     if (value.type === 'added') {
-      value = `+ ${value.name}:${val2}\n`;
+      return `+ ${value.name}:${val2}\n`;
     }
     if (value.type === 'nested') {
-      value = `  ${value.name}: {\n\t${renderResultStylish(value.children)}\n\t}\n`;
+      return `  ${value.name}: {\n\t${renderResultStylish(value.children)}\n\t}\n`;
     }
     return value;
   };
@@ -67,6 +67,7 @@ const getRenderFormat = (format, tree) => {
   } if (format === 'plain') {
     return renderResultPlain(tree);
   }
+  return null;
 };
 
 const buildTree = (data1, data2) => {

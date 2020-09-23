@@ -1,10 +1,11 @@
 import * as path from 'path';
 import * as fs from 'fs';
+import { test, expect } from '@jest/globals';
 // const gendiff = require('../index.js');
 // const path = require('path');
 // const fs = require('fs');
 import { fileURLToPath } from 'url';
-import gendiff from '../src/index.js';
+import gendiff from '../index.js';
 // import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -25,8 +26,8 @@ test.each([
   [getFixturePath('before.json'), getFixturePath('after.json'), res1],
   [getFixturePath('before.yaml'), getFixturePath('after.yaml'), res1],
   [getFixturePath('before.ini'), getFixturePath('after.ini'), res1],
-  [,, 'Empty arguments'],
-  [getFixturePath('before.json'), , 'Empty arguments'],
+  [null, null, 'Empty arguments'],
+  [getFixturePath('before.json'), null, 'Empty arguments'],
   [getFixturePath('before.json'), 'afterrrr', 'Not files'],
 
 ])('gendiff(%j, %j)', (a, b, expected) => {
