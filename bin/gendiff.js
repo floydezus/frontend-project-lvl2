@@ -1,4 +1,4 @@
-#!/usr/bin/node
+#!/usr/bin/env node
 
 // const pack = require('../../package.json');
 import pkg from 'commander';
