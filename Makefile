@@ -2,7 +2,7 @@ install: install-deps
 
 
 install-deps:
-	npm install
+	npm ci
 
 start:
 	npx node 'bin/gendiff.js' -h
