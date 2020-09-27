@@ -29,4 +29,4 @@ $ make start
 -------------------------
 ## Example
 
-    https://asciinema.org/a/gzRi0O4I7SPeUlgDvFDy7QMea
+[![asciicast](https://asciinema.org/a/gzRi0O4I7SPeUlgDvFDy7QMea.png)](https://asciinema.org/a/gzRi0O4I7SPeUlgDvFDy7QMea)
