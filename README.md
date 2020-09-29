@@ -14,9 +14,9 @@ $ make install
 ```sh
 $ make test
 ```
-## Run
+## Help
 ```sh
-$ make run
+$ make help
 ```
 ----------------------------
 ## Usage
