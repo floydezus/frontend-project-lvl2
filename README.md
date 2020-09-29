@@ -16,7 +16,7 @@ $ make test
 ```
 ## Run
 ```sh
-$ make start
+$ make run
 ```
 ----------------------------
 ## Usage
