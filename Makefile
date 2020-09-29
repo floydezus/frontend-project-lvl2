@@ -3,12 +3,15 @@ install: install-deps
 
 install-deps:
 	npm ci
+	npm link
 
 start:
 	npx node 'bin/gendiff.js' -h
+run: 
+	gendiff -h	
 
 lint:
-	npx eslint . --fix
+	npx eslint .
 
 publish:
 	npm publish --dry-run
