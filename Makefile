@@ -7,7 +7,7 @@ install-deps:
 
 start:
 	npx node 'bin/gendiff.js' -h
-run: 
+help: 
 	gendiff -h	
 
 lint:
