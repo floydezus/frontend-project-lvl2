@@ -1,12 +1,8 @@
 import path from 'path';
 import fs from 'fs';
 import { test, expect } from '@jest/globals';
-// const gendiff = require('../index.js');
-// const path = require('path');
-// const fs = require('fs');
 import { fileURLToPath } from 'url';
 import gendiff from '../index.js';
-// import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,17 +11,41 @@ const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', 
 
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
-const res1 = readFile('before_after.txt').trim();
-const res2 = readFile('file1_file2_plain.txt');
+let expectedStylish = 0;
+let expectedPlain;
+
+beforeAll(() => {
+  // stylish
+  expectedStylish = readFile('expected.stylish').trim();
+  // plain
+  expectedPlain = readFile('expected.plain');
+  // json
+});
 
 test('plain', () => {
-  expect(gendiff(getFixturePath('file1.json'), getFixturePath('file2.json'), 'plain')).toEqual(res2);
+  const currentPlain = gendiff(getFixturePath('file1.json'), getFixturePath('file2.json'), 'plain');
+  expect(currentPlain).toEqual(expectedPlain);
+});
+
+test('json_stylish', () => {
+  const currentStylish = gendiff(getFixturePath('before.json'), getFixturePath('after.json'), 'stylish');
+  expect(currentStylish).toEqual(expectedStylish);
+});
+
+test('yml_stylish', () => {
+  const currentStylish = gendiff(getFixturePath('before.yaml'), getFixturePath('after.yaml'), 'stylish');
+  expect(currentStylish).toEqual(expectedStylish);
+});
+
+test('ini_stylish', () => {
+  const currentStylish = gendiff(getFixturePath('before.ini'), getFixturePath('after.ini'), 'stylish');
+  expect(currentStylish).toEqual(expectedStylish);
 });
 
 test.each([
-  [getFixturePath('before.json'), getFixturePath('after.json'), res1],
-  [getFixturePath('before.yaml'), getFixturePath('after.yaml'), res1],
-  [getFixturePath('before.ini'), getFixturePath('after.ini'), res1],
+  // [getFixturePath('before.json'), getFixturePath('after.json'), expectedStylish],
+  // [getFixturePath('before.yaml'), getFixturePath('after.yaml'), expectedStylish],
+  // [getFixturePath('before.ini'), getFixturePath('after.ini'), expectedStylish],
   [null, null, 'Empty arguments'],
   [getFixturePath('before.json'), null, 'Empty arguments'],
   [getFixturePath('before.json'), 'afterrrr', 'Not files'],

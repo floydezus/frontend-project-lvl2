@@ -13,10 +13,10 @@ program
   // .version(version)
   .description('Compares two configuration files and shows a difference.')
   // .description(description)
-  .arguments('<firstConfig> <secondConfig>')
+  .arguments('<pathToFile1> <pathToFile2>')
   .option('-f, --format [type]', 'output format', 'stylish')
-  .action((firstConfig, secondConfig) => {
-    console.log(gendiff(firstConfig, secondConfig, program.format));
+  .action((pathToFile1, pathToFile2) => {
+    console.log(gendiff(pathToFile1, pathToFile2, program.format));
   });
 
 program.parse(process.argv);

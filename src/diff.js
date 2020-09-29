@@ -3,22 +3,24 @@ import _ from 'lodash';
 import getObjFromFile from './parsers.js';
 // const getObjFromFile = require('./parsers.js');
 
+const setPlainStringify = (value) => ((typeof (value) === 'string') ? `'${value}'` : `${value}`);
+
 const renderResultPlain = (arrayResult) => {
   const getNodesCount = (tree, parent = '') => {
     if (tree.type !== 'nested') {
-      const val1 = (typeof (tree.value1) === 'object') ? '[complex value]' : tree.value1;
-      const val2 = (typeof (tree.value2) === 'object') ? '[complex value]' : tree.value2;
+      const val1 = (typeof (tree.value1) === 'object') ? '[complex value]' : setPlainStringify(tree.value1);
+      const val2 = (typeof (tree.value2) === 'object') ? '[complex value]' : setPlainStringify(tree.value2);
       if (tree.type === 'unchanged') {
         return 'unchanged';
       }
       if (tree.type === 'added') {
-        return `Property ${parent}.${tree.name} was added with value:${val2}`;
+        return `Property '${parent}.${tree.name}' was added with value: ${val2}`;
       }
       if (tree.type === 'deleted') {
-        return `Property ${parent}.${tree.name} was removed`;
+        return `Property '${parent}.${tree.name}' was removed`;
       }
       if (tree.type === 'changed') {
-        return `Property ${parent}.${tree.name}  was updated. From ${val1} to ${val2}`;
+        return `Property '${parent}.${tree.name}' was updated. From ${val1} to ${val2}`;
       }
       return tree;
     }
@@ -31,7 +33,8 @@ const renderResultPlain = (arrayResult) => {
   return _.flattenDeep(arrayResult
     .map((e) => getNodesCount(e, '')))
     .filter((value) => (value !== 'unchanged'))
-    .map((e) => e.replace(' .', ' '))
+    .sort()
+    .map((e) => e.replace('\'.', '\''))
     .join('\n');
 };
 
