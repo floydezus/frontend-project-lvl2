@@ -21,7 +21,7 @@ $ make help
 ----------------------------
 ## Usage
 ```sh
-    Usage: gendiff [options] <firstConfig> <secondConfig>
+    Usage: gendiff [options] <pathToFile1> <pathToFile2>
 
     Compares two configuration files and shows a difference.
 
@@ -29,6 +29,9 @@ $ make help
     -V, --version        output the version number
     -f, --format [type]  output format (default: "stylish")
     -h, --help           display help for command
+    
+    [type] - plain, json, nested
+    <pathToFile> - path to json, yaml or ini configuration file
 ```
 -------------------------
 ## Example
