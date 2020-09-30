@@ -11,8 +11,9 @@ const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', 
 
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
-let expectedStylish = 0;
+let expectedStylish;
 let expectedPlain;
+let expectedJson;
 
 beforeAll(() => {
   // stylish
@@ -20,6 +21,7 @@ beforeAll(() => {
   // plain
   expectedPlain = readFile('expected.plain');
   // json
+  expectedJson = readFile('expected.json');
 });
 
 test('plain', () => {
@@ -27,29 +29,17 @@ test('plain', () => {
   expect(currentPlain).toEqual(expectedPlain);
 });
 
-test('json_stylish', () => {
-  const currentStylish = gendiff(getFixturePath('before.json'), getFixturePath('after.json'), 'stylish');
-  expect(currentStylish).toEqual(expectedStylish);
+test('stylish', () => {
+  const jsonStylish = gendiff(getFixturePath('file_plain_1.json'), getFixturePath('file_plain_2.json'), 'stylish');
+  const yamlStylish = gendiff(getFixturePath('file_plain_1.yaml'), getFixturePath('file_plain_2.yaml'), 'stylish');
+  const iniStylish = gendiff(getFixturePath('file_plain_1.ini'), getFixturePath('file_plain_2.ini'), 'stylish');
+
+  expect(jsonStylish).toEqual(expectedStylish);
+  expect(yamlStylish).toEqual(expectedStylish);
+  expect(iniStylish).toEqual(expectedStylish);
 });
 
-test('yml_stylish', () => {
-  const currentStylish = gendiff(getFixturePath('before.yaml'), getFixturePath('after.yaml'), 'stylish');
-  expect(currentStylish).toEqual(expectedStylish);
-});
-
-test('ini_stylish', () => {
-  const currentStylish = gendiff(getFixturePath('before.ini'), getFixturePath('after.ini'), 'stylish');
-  expect(currentStylish).toEqual(expectedStylish);
-});
-
-test.each([
-  // [getFixturePath('before.json'), getFixturePath('after.json'), expectedStylish],
-  // [getFixturePath('before.yaml'), getFixturePath('after.yaml'), expectedStylish],
-  // [getFixturePath('before.ini'), getFixturePath('after.ini'), expectedStylish],
-  [null, null, 'Empty arguments'],
-  [getFixturePath('before.json'), null, 'Empty arguments'],
-  [getFixturePath('before.json'), 'afterrrr', 'Not files'],
-
-])('gendiff(%j, %j)', (a, b, expected) => {
-  expect(gendiff(a, b)).toBe(expected);
+test('json', () => {
+  const currentJson = gendiff(getFixturePath('file_plain_1.json'), getFixturePath('file_plain_2.json'), 'json');
+  expect(currentJson).toEqual(expectedJson);
 });

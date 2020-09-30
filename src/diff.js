@@ -1,12 +1,10 @@
-// var _ = require('lodash');
 import _ from 'lodash';
 import getObjFromFile from './parsers.js';
-// const getObjFromFile = require('./parsers.js');
 
 const setPlainStringify = (value) => ((typeof (value) === 'string') ? `'${value}'` : `${value}`);
 
 const renderResultPlain = (arrayResult) => {
-  const getNodesCount = (tree, parent = '') => {
+  const getNodesString = (tree, parent = '') => {
     if (tree.type !== 'nested') {
       const val1 = (typeof (tree.value1) === 'object') ? '[complex value]' : setPlainStringify(tree.value1);
       const val2 = (typeof (tree.value2) === 'object') ? '[complex value]' : setPlainStringify(tree.value2);
@@ -25,15 +23,14 @@ const renderResultPlain = (arrayResult) => {
       return tree;
     }
     const { children } = tree;
-    const descendantCounts = children.map((e) => getNodesCount(e, `${parent}.${tree.name}`));
+    const relativeNodes = children.map((e) => getNodesString(e, `${parent}.${tree.name}`));
 
-    return descendantCounts;
+    return relativeNodes;
   };
 
   return _.flattenDeep(arrayResult
-    .map((e) => getNodesCount(e, '')))
+    .map((e) => getNodesString(e, '')))
     .filter((value) => (value !== 'unchanged'))
-    .sort()
     .map((e) => e.replace('\'.', '\''))
     .join('\n');
 };
@@ -44,23 +41,23 @@ const renderResultStylish = (arrayResult) => {
     const val2 = (typeof (value.value2) === 'object') ? JSON.stringify(value.value2) : value.value2;
 
     if (value.type === 'changed') {
-      return `- ${value.name}:${val1}\n+ ${value.name}:${val2}\n`;
+      return `  - ${value.name}: ${val1}\n  + ${value.name}: ${val2}`;
     }
     if (value.type === 'unchanged') {
-      return `  ${value.name}:${val1}\n`;
+      return `    ${value.name}: ${val1}`;
     }
     if (value.type === 'deleted') {
-      return `- ${value.name}:${val1}\n`;
+      return `  - ${value.name}: ${val1}`;
     }
     if (value.type === 'added') {
-      return `+ ${value.name}:${val2}\n`;
+      return `  + ${value.name}: ${val2}`;
     }
     if (value.type === 'nested') {
       return `  ${value.name}: {\n\t${renderResultStylish(value.children)}\n\t}\n`;
     }
     return value;
   };
-  const stringResult = arrayResult.flatMap(callback).join('').trim();
+  const stringResult = `{\n  ${arrayResult.flatMap(callback).join('\n').trim()}\n}`;
   return stringResult;
 };
 
@@ -69,18 +66,16 @@ const getRenderFormat = (format, tree) => {
     return renderResultStylish(tree);
   } if (format === 'plain') {
     return renderResultPlain(tree);
+  } if (format === 'json') {
+    return JSON.stringify(tree);
   }
   return null;
 };
 
 const buildTree = (data1, data2) => {
-  // мержим объекты, чтобы получить единый массив ключей
-  // console.log(`~~~~~`);
-  // console.log(data1);
   const data1Cloned = _.cloneDeep(data1);
-  // console.log(data1Cloned);
   const objectForMerge = _.merge(data1Cloned, data2);
-  const arrayKeys = Object.keys(objectForMerge);
+  const arrayKeys = Object.keys(objectForMerge).sort();
 
   const reduceResult = (acc, currentVal) => {
     // где-то в начале проверяем плоский ли файл
@@ -119,24 +114,11 @@ const buildTree = (data1, data2) => {
 };
 
 const gendiff = (pathToFile1, pathToFile2, format = 'stylish') => {
-  if ((pathToFile1 == null) || (pathToFile2 == null)) {
-    console.log('Empty arguments');
-    return 'Empty arguments';
-  }
   const objectFromFile1 = getObjFromFile(pathToFile1);
   const objectFromFile2 = getObjFromFile(pathToFile2);
-
-  if ((objectFromFile1 == null) || (objectFromFile2 == null)) {
-    console.log('Not files');
-    return 'Not files';
-  }
-
   const tree = buildTree(objectFromFile1, objectFromFile2);
   const resultPrint = getRenderFormat(format, tree);
   return resultPrint;
 };
 
-// console.log(gendiff('/home/alexander/file11.json', '/home/alexander/file22.json', 'plain'));
-
 export default gendiff;
-// module.exports = gendiff;

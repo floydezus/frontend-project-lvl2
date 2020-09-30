@@ -1,22 +1,17 @@
 #!/usr/bin/env node
 
-// const pack = require('../../package.json');
 import pkg from 'commander';
 import gendiff from '../index.js';
-// import {version, description} from '../../package.json';
+
 const { Command } = pkg;
-// console.log(pack.version);
 const program = new Command();
 
 program
   .version('1.1.0')
-  // .version(version)
   .description('Compares two configuration files and shows a difference.')
-  // .description(description)
   .arguments('<pathToFile1> <pathToFile2>')
   .option('-f, --format [type]', 'output format', 'stylish')
   .action((pathToFile1, pathToFile2) => {
     console.log(gendiff(pathToFile1, pathToFile2, program.format));
-  });
-
-program.parse(process.argv);
+  })
+  .parse(process.argv);
