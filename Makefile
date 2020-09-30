@@ -3,6 +3,8 @@ install: install-deps
 
 install-deps:
 	npm ci
+
+link:
 	npm link
 
 start:
