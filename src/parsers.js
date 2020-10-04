@@ -1,31 +1,26 @@
-// const fs = require('fs');
-// const path = require('path');
-// const yaml = require('js-yaml');
-// const ini = require('ini');
 import * as fs from 'fs';
 import * as path from 'path';
-import yaml from 'js-yaml';
-import ini from 'ini';
+import parseJson from './parsers/json.js';
+import parseYaml from './parsers/yaml.js';
+import parseIni from './parsers/ini.js';
 
-const getParser = (extname, content) => {
-  if ((extname === '') || (extname === '.json')) {
-    return JSON.parse(content);
-  } if ((extname === '.yaml') || (extname === '.yml')) {
-    return yaml.load(content);
-  } if (extname === '.ini') {
-    return ini.parse(content);
+const getParser = (extName, content) => {
+  if ((extName === '') || (extName === '.json')) {
+    return parseJson(content);
+  } if ((extName === '.yaml') || (extName === '.yml')) {
+    return parseYaml(content);
+  } if (extName === '.ini') {
+    return parseIni(content);
   }
   return null;
 };
 
-const getObjFromFile = (filePath) => {
+const parseFile = (filePath) => {
   if (fs.existsSync(filePath)) {
     const content = fs.readFileSync(filePath, 'utf8');
-    // console.log(path.extname(filePath));
     return getParser(path.extname(filePath), content);
   }
   return null;
 };
 
-export default getObjFromFile;
-// module.exports = getObjFromFile;
+export default parseFile;
