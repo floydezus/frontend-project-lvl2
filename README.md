@@ -10,11 +10,6 @@ Compares two configuration files and shows a difference.
 ```sh
 $ make install
 ```
-## Link
-```sh
-$ make link
-```
-
 ## Run tests
 ```sh
 $ make test
