@@ -2,16 +2,17 @@ import renderResultStylish from './formatters/stylish.js';
 import renderResultPlain from './formatters/plain.js';
 import renderResultJson from './formatters/json.js';
 
-const renderFormat = (format, tree) => {
-  if (format === 'stylish') {
-    return renderResultStylish(tree);
-  } if (format === 'plain') {
-    return renderResultPlain(tree);
-  } if (format === 'json') {
-    // return JSON.stringify(tree);
-    return renderResultJson(tree);
+const render = (format, tree) => {
+  switch (format) {
+    case 'stylish':
+      return renderResultStylish(tree);
+    case 'plain':
+      return renderResultPlain(tree);
+    case 'json':
+      return renderResultJson(tree);
+    default:
+      throw new Error(`Unknown render format: '${format}'!`);
   }
-  return null;
 };
 
-export default renderFormat;
+export default render;

@@ -1,26 +1,19 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import parseJson from './parsers/json.js';
 import parseYaml from './parsers/yaml.js';
 import parseIni from './parsers/ini.js';
 
-const getParser = (extName, content) => {
-  if ((extName === '') || (extName === '.json')) {
-    return parseJson(content);
-  } if ((extName === '.yaml') || (extName === '.yml')) {
-    return parseYaml(content);
-  } if (extName === '.ini') {
-    return parseIni(content);
+const parse = (content, extName) => {
+  switch (extName) {
+    case '.json':
+      return parseJson(content);
+    case '.yaml':
+    case '.yml':
+      return parseYaml(content);
+    case '.ini':
+      return parseIni(content);
+    default:
+      throw new Error(`Unknown extension file: '${extName}'!`);
   }
-  return null;
 };
 
-const parseFile = (filePath) => {
-  if (fs.existsSync(filePath)) {
-    const content = fs.readFileSync(filePath, 'utf8');
-    return getParser(path.extname(filePath), content);
-  }
-  return null;
-};
-
-export default parseFile;
+export default parse;
