@@ -1,2 +1,2 @@
-const renderResultJson = (data) => JSON.stringify(data);
-export default renderResultJson;
+const formatJson = (data) => JSON.stringify(data);
+export default formatJson;

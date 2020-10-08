@@ -1,18 +1,18 @@
-import renderResultStylish from './formatters/stylish.js';
-import renderResultPlain from './formatters/plain.js';
-import renderResultJson from './formatters/json.js';
+import formatStylish from './formatters/stylish.js';
+import formatPlain from './formatters/plain.js';
+import formatJson from './formatters/json.js';
 
-const render = (format, tree) => {
+const formatter = (tree, format) => {
   switch (format) {
     case 'stylish':
-      return renderResultStylish(tree);
+      return formatStylish(tree);
     case 'plain':
-      return renderResultPlain(tree);
+      return formatPlain(tree);
     case 'json':
-      return renderResultJson(tree);
+      return formatJson(tree);
     default:
       throw new Error(`Unknown render format: '${format}'!`);
   }
 };
 
-export default render;
+export default formatter;

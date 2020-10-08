@@ -1,23 +1,25 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import buildTree from './src/buildtree.js';
+import buildTree from './src/treebuilder.js';
 import parse from './src/parsers.js';
-import render from './src/formatters.js';
+import formatter from './src/formatters.js';
 
 const readFile = (filePath) => fs.readFileSync(filePath, 'utf8');
+const getFormat = (extname) => extname.slice(1);
 
 const gendiff = (pathToFile1, pathToFile2, format = 'stylish') => {
   // чтение файлов
   const data1 = readFile(pathToFile1);
   const data2 = readFile(pathToFile2);
   // парсинг
-  const parcedData1 = parse(data1, path.extname(pathToFile1));
-  const parcedData2 = parse(data2, path.extname(pathToFile2));
+  const format1 = getFormat(path.extname(pathToFile1));
+  const format2 = getFormat(path.extname(pathToFile2));
+  const parsedData1 = parse(data1, format1);
+  const parsedData2 = parse(data2, format2);
   // построение дерева различий
-  const tree = buildTree(parcedData1, parcedData2);
+  const tree = buildTree(parsedData1, parsedData2);
   // получение результата в нужном виде
-  const resultString = render(format, tree);
-  return resultString;
+  return formatter(tree, format);
 };
 
 export default gendiff;

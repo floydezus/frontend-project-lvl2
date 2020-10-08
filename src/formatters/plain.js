@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 const setPlainStringify = (value) => ((typeof (value) === 'string') ? `'${value}'` : `${value}`);
 
-const renderResultPlain = (arrayResult) => {
+const formatPlain = (arrayResult) => {
   const getNodesString = (tree, parent = '') => {
     if (tree.type !== 'nested') {
       const val1 = (typeof (tree.value1) === 'object') ? '[complex value]' : setPlainStringify(tree.value1);
@@ -34,4 +34,4 @@ const renderResultPlain = (arrayResult) => {
     .join('\n');
 };
 
-export default renderResultPlain;
+export default formatPlain;

@@ -27,7 +27,7 @@ beforeAll(() => {
 const cases = [
   ['json'],
   ['yaml'],
-  // ['ini']
+  ['ini'],
 ];
 
 describe.each(cases)('first file and second file %p as format', (format) => {
