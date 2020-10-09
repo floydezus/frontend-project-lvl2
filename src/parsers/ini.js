@@ -3,17 +3,16 @@ import _ from 'lodash';
 
 const parseIni = (data) => {
   const object = ini.parse(data);
-  const base = 10;
-  const parse = (tree) => {
-    const fixNumbers = (value) => {
-      if (typeof (value) === 'object') {
-        return parse(value);
+  const numberifyValues = (tree) => {
+    const numberifyValuesInner = (value) => {
+      if (_.isObject(value)) {
+        return numberifyValues(value);
       }
-      const result = parseInt(value, base);
-      return isNaN(result) ? value : result;
+      const result = parseFloat(value);
+      return Number.isNaN(result) ? value : result;
     };
-    return _.mapValues(tree, fixNumbers);
+    return _.mapValues(tree, numberifyValuesInner);
   };
-  return parse(object);
+  return numberifyValues(object);
 };
 export default parseIni;
