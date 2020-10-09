@@ -2,8 +2,8 @@ import parseJson from './parsers/json.js';
 import parseYaml from './parsers/yaml.js';
 import parseIni from './parsers/ini.js';
 
-const parse = (content, extName) => {
-  switch (extName) {
+const parse = (content, format) => {
+  switch (format) {
     case 'json':
       return parseJson(content);
     case 'yaml':
@@ -12,7 +12,7 @@ const parse = (content, extName) => {
     case 'ini':
       return parseIni(content);
     default:
-      throw new Error(`Unknown extension file: '${extName}'!`);
+      throw new Error(`Unknown format: '${format}'!`);
   }
 };
 

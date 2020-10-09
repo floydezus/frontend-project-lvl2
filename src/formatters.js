@@ -11,7 +11,7 @@ const formatter = (tree, format) => {
     case 'json':
       return formatJson(tree);
     default:
-      throw new Error(`Unknown render format: '${format}'!`);
+      throw new Error(`Unknown format: '${format}'!`);
   }
 };
 
