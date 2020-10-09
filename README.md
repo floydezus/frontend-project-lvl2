@@ -1,6 +1,6 @@
 # Gendiff
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/968adb4773696b6c8767/maintainability)](https://codeclimate.com/github/floydezus/frontend-project-lvl2/maintainability)  [![Test Coverage](https://api.codeclimate.com/v1/badges/968adb4773696b6c8767/test_coverage)](https://codeclimate.com/github/floydezus/frontend-project-lvl2/test_coverage) ![Node.js CI](https://github.com/floydezus/frontend-project-lvl2/workflows/Node.js%20CI/badge.svg)
+[![Maintainability](https://api.codeclimate.com/v1/badges/968adb4773696b6c8767/maintainability)](https://codeclimate.com/github/floydezus/frontend-project-lvl2/maintainability)  [![Test Coverage](https://api.codeclimate.com/v1/badges/968adb4773696b6c8767/test_coverage)](https://codeclimate.com/github/floydezus/frontend-project-lvl2/test_coverage) ![Node.js CI](https://github.com/floydezus/frontend-project-lvl2/workflows/Node.js%20CI/badge.svg) ![hexlet-check](https://github.com/floydezus/frontend-project-lvl2/workflows/hexlet-check/badge.svg)
 
 ## Description
 Gendiff is a command-line difference calculator.
