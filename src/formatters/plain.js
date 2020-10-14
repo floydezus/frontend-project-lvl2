@@ -1,12 +1,16 @@
 import _ from 'lodash';
 
-const setPlainStringify = (value) => ((typeof (value) === 'string') ? `'${value}'` : `${value}`);
-
+const setPlainStringify = (value) => {
+  if (_.isObject(value)) {
+    return '[complex value]';
+  }
+  return (typeof (value) === 'string') ? `'${value}'` : `${value}`;
+};
 const formatPlain = (arrayResult) => {
   const getNodesString = (tree, parent = '') => {
     if (tree.type !== 'nested') {
-      const val1 = (typeof (tree.value1) === 'object') ? '[complex value]' : setPlainStringify(tree.value1);
-      const val2 = (typeof (tree.value2) === 'object') ? '[complex value]' : setPlainStringify(tree.value2);
+      const val1 = setPlainStringify(tree.value1);
+      const val2 = setPlainStringify(tree.value2);
       if (tree.type === 'unchanged') {
         return 'unchanged';
       }
