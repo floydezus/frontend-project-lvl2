@@ -1,39 +1,35 @@
 import _ from 'lodash';
 
-const setPlainStringify = (value) => {
+const stringifyValue = (value) => {
   if (_.isObject(value)) {
     return '[complex value]';
   }
-  return (typeof (value) === 'string') ? `'${value}'` : `${value}`;
+  return (_.isString(value)) ? `'${value}'` : `${value}`;
 };
-const formatPlain = (arrayResult) => {
-  const getNodesString = (tree, parent = '') => {
-    if (tree.type !== 'nested') {
-      const val1 = setPlainStringify(tree.value1);
-      const val2 = setPlainStringify(tree.value2);
-      if (tree.type === 'unchanged') {
-        return 'unchanged';
-      }
-      if (tree.type === 'added') {
-        return `Property '${parent}.${tree.name}' was added with value: ${val2}`;
-      }
-      if (tree.type === 'deleted') {
-        return `Property '${parent}.${tree.name}' was removed`;
-      }
-      if (tree.type === 'changed') {
-        return `Property '${parent}.${tree.name}' was updated. From ${val1} to ${val2}`;
-      }
-      return tree;
+const formatPlain = (diffTree) => {
+  const iter = (tree, parentName = '') => {
+    const { type } = tree;
+    switch (type) {
+      case 'added':
+        return `Property '${parentName}.${tree.name}' was added with value: ${stringifyValue(tree.value2)}`;
+      case 'deleted':
+        return `Property '${parentName}.${tree.name}' was removed`;
+      case 'unchanged':
+        return null;
+      case 'changed':
+        return `Property '${parentName}.${tree.name}' was updated. From ${stringifyValue(tree.value1)} to ${stringifyValue(tree.value2)}`;
+      case 'nested':
+        return tree.children.flatMap((node) => iter(node, `${parentName}.${tree.name}`));
+      default:
+        throw new Error(`Unknown type of node: '${type}'!`);
     }
-    const { children } = tree;
-    const relativeNodes = children.map((e) => getNodesString(e, `${parent}.${tree.name}`));
-
-    return relativeNodes;
   };
 
-  return _.flattenDeep(arrayResult
-    .map((e) => getNodesString(e, '')))
-    .filter((value) => (value !== 'unchanged'))
+  const strings = diffTree
+    .flatMap((e) => iter(e, ''));
+
+  return strings
+    .filter(_.identity)
     .map((e) => e.replace('\'.', '\''))
     .join('\n');
 };
