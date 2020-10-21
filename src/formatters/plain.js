@@ -35,8 +35,7 @@ const formatPlain = (diffTree) => {
   const strings = iter(diffTree, '');
 
   return strings
-    .filter(_.identity)
-    .map((e) => e.replace('\'.', '\''))
+    .filter(_.identity)    
     .join('\n');
 };
 
