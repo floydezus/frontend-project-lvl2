@@ -1,26 +1,59 @@
-const formatStylish = (arrayResult) => {
-  const callback = (value) => {
-    const val1 = (typeof (value.value1) === 'object') ? JSON.stringify(value.value1) : value.value1;
-    const val2 = (typeof (value.value2) === 'object') ? JSON.stringify(value.value2) : value.value2;
+import _ from 'lodash';
 
-    if (value.type === 'changed') {
-      return `  - ${value.name}: ${val1}\n  + ${value.name}: ${val2}`;
+const replacer = '  ';
+const stringify = (value, outDepth) => {
+  const iter = (currentValue, depth) => {
+    if (!_.isObject(currentValue)) {
+      return currentValue;
     }
-    if (value.type === 'unchanged') {
-      return `    ${value.name}: ${val1}`;
-    }
-    if (value.type === 'deleted') {
-      return `  - ${value.name}: ${val1}`;
-    }
-    if (value.type === 'added') {
-      return `  + ${value.name}: ${val2}`;
-    }
-    if (value.type === 'nested') {
-      return `  ${value.name}: {\n\t${formatStylish(value.children)}\n\t}\n`;
-    }
-    return value;
+    const deepIndentSize = depth + 1;
+    const deepIndent = replacer.repeat(deepIndentSize);
+    const currentIndent = replacer.repeat(depth);
+    const lines = Object
+      .entries(currentValue)
+      .map(([key, val]) => `${deepIndent}${key}: ${iter(val, deepIndentSize)}`);
+
+    return [
+      '{',
+      ...lines,
+      `${currentIndent}}`,
+    ].join('\n');
   };
-  const stringResult = `{\n  ${arrayResult.flatMap(callback).join('\n').trim()}\n}`;
-  return stringResult;
+
+  return iter(value, outDepth);
 };
+const formatStylish = (diffTree) => {
+  const iter = (currentValue, depth) => currentValue.flatMap((tree) => {
+    const deepIndentSize = depth + 1;
+    const deepIndent = replacer.repeat(deepIndentSize);
+    const currentIndent = replacer.repeat(depth);
+    const { type } = tree;
+    switch (type) {
+      case 'added':
+        return `${deepIndent}+ ${tree.name}: ${stringify(tree.value2, depth)}`;
+      case 'deleted':
+        return `${deepIndent}- ${tree.name}: ${stringify(tree.value1, depth)}`;
+      case 'unchanged':
+        return `${deepIndent}  ${tree.name}: ${stringify(tree.value1, depth)}`;
+      case 'changed':
+        return `${deepIndent}- ${tree.name}: ${stringify(tree.value1, depth)}\n${deepIndent}+ ${tree.name}: ${stringify(tree.value2, depth)}`;
+      case 'nested': {
+        const lines = iter(tree.children, depth + 2);
+        const data = [
+          '{',
+          ...lines,
+          `${currentIndent}}`,
+        ].join('\n');
+        return `${deepIndent}  ${tree.name}: ${data}`;
+      }
+      default:
+        throw new Error(`Unknown type of node: '${type}'!`);
+    }
+  });
+
+  const data = iter(diffTree, 0);
+
+  return `{\n${data.join('\n')}\n}`;
+};
+
 export default formatStylish;

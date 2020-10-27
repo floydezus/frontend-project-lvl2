@@ -12,12 +12,15 @@ const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', 
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
 let expectedStylish;
+let expectedStylishNested;
+
 let expectedPlain;
 let expectedJson;
 
 beforeAll(() => {
   // stylish
   expectedStylish = readFile('expected.stylish').trim();
+  expectedStylishNested = readFile('expected.stylishnested').trim();
   // plain
   expectedPlain = readFile('expected_flat.plain').trim();
   // json
@@ -57,4 +60,11 @@ describe.each(cases)('first file and second file %p as format', (format) => {
 
     expect(actual).toEqual(expected);
   });
+});
+
+test('nested stylish', () => {
+  const actual = gendiff(getFixturePath('file_nested_1.json'), getFixturePath('file_nested_2.json'));
+  const expected = expectedStylishNested;
+
+  expect(actual).toEqual(expected);
 });

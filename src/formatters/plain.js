@@ -6,7 +6,7 @@ const stringifyValue = (value) => {
   }
   return (_.isString(value)) ? `'${value}'` : `${value}`;
 };
-const verifyNameKey = (parentName, currentNodeName) => {
+const buildNameKey = (parentName, currentNodeName) => {
   if (_.isEmpty(parentName)) {
     return `${currentNodeName}`;
   }
@@ -15,7 +15,7 @@ const verifyNameKey = (parentName, currentNodeName) => {
 const formatPlain = (diffTree) => {
   const iter = (node, parentName = '') => node.flatMap((tree) => {
     const { type } = tree;
-    const currentName = verifyNameKey(parentName, tree.name);
+    const currentName = buildNameKey(parentName, tree.name);
     switch (type) {
       case 'added':
         return `Property '${currentName}' was added with value: ${stringifyValue(tree.value2)}`;
