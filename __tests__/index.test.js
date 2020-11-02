@@ -11,60 +11,27 @@ const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', 
 
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
-let expectedStylish;
-let expectedStylishNested;
+const expectedStylish = readFile('expected.stylish').trim();
+const expectedPlain = readFile('expected.plain').trim();
+const expectedJson = readFile('expected.json');
 
-let expectedPlain;
-let expectedJson;
+const cases = [['json', 'stylish', expectedStylish],
+  ['yaml', 'stylish', expectedStylish],
+  ['ini', 'stylish', expectedStylish],
+  ['json', undefined, expectedStylish],
+  ['json', 'plain', expectedPlain],
+  ['yaml', 'plain', expectedPlain],
+  ['ini', 'plain', expectedPlain],
+  ['yaml', 'json', expectedJson],
+  ['json', 'json', expectedJson],
+  ['ini', 'json', expectedJson]];
 
-beforeAll(() => {
-  // stylish
-  expectedStylish = readFile('expected.stylish').trim();
-  expectedStylishNested = readFile('expected.stylishnested').trim();
-  // plain
-  expectedPlain = readFile('expected_flat.plain').trim();
-  // json
-  expectedJson = readFile('expected.json');
-});
-
-const cases = [
-  ['json'],
-  ['yaml'],
-  ['ini'],
-];
-
-describe.each(cases)('first file and second file %p as format', (format) => {
-  test('stylish formatter', () => {
-    const actual = gendiff(getFixturePath(`file_plain_1.${format}`), getFixturePath(`file_plain_2.${format}`), 'stylish');
-    const expected = expectedStylish;
-
-    expect(actual).toEqual(expected);
-  });
-
-  test('plain formatter', () => {
-    const actual = gendiff(getFixturePath(`file_plain_1.${format}`), getFixturePath(`file_plain_2.${format}`), 'plain');
-    const expected = expectedPlain;
-
-    expect(actual).toEqual(expected);
-  });
-
-  test('json formatter', () => {
-    const actual = gendiff(getFixturePath(`file_plain_1.${format}`), getFixturePath(`file_plain_2.${format}`), 'json');
-    const expected = expectedJson;
-
-    expect(actual).toEqual(expected);
-  });
-  test('empty formatter', () => {
-    const actual = gendiff(getFixturePath(`file_plain_1.${format}`), getFixturePath(`file_plain_2.${format}`));
-    const expected = expectedStylish;
-
-    expect(actual).toEqual(expected);
-  });
-});
-
-test('nested stylish', () => {
-  const actual = gendiff(getFixturePath('file_nested_1.json'), getFixturePath('file_nested_2.json'));
-  const expected = expectedStylishNested;
-
-  expect(actual).toEqual(expected);
+describe('compares two configuration files', () => {
+  test.each(cases)(
+    'file1 and file2 %p as format, formatter %p',
+    (format, formatterName, expectedResult) => {
+      const result = gendiff(getFixturePath(`file1.${format}`), getFixturePath(`file2.${format}`), formatterName);
+      expect(result).toEqual(expectedResult);
+    },
+  );
 });
