@@ -1,5 +1,10 @@
 import _ from 'lodash';
 
+const keyOffset = 4;
+const prefixOffset = 2;
+const indentSymbol = ' ';
+const openSymbol = '{';
+const closeSymbol = '}';
 const prefixes = {
   deleted: '-',
   added: '+',
@@ -7,52 +12,63 @@ const prefixes = {
   nested: ' ',
 };
 
-const stringify = (value, replacer = ' ', spacesCount = 1) => {
-  const iter = (currentValue, depth) => {
-    if (!_.isObject(currentValue)) {
-      return currentValue;
-    }
+const stringify = (value, depth) => {
+  if (!_.isObject(value)) {
+    return value;
+  }
 
-    const indentSize = depth * spacesCount;
-    const bracketIndent = replacer.repeat(indentSize - spacesCount);
-    const lines = Object
-      .entries(currentValue)
-      .map(([key, val]) => {
-        const indentSizeInner = (key.includes(' ')) ? depth * spacesCount - 2 : depth * spacesCount;
-        const currentIndent = replacer.repeat(indentSizeInner);
-        return `${currentIndent}${key}: ${iter(val, depth + 1)}`;
-      });
+  const indentSize = depth * keyOffset;
+  const keyIndent = indentSymbol.repeat(indentSize);
+  const bracketIndent = indentSymbol.repeat(indentSize - keyOffset);
+  const lines = Object.entries(value)
+    .flatMap(([key, val]) => `${keyIndent}${key}: ${stringify(val, depth + 1)}`);
 
-    return [
-      '{',
-      ...lines,
-      `${bracketIndent}}`,
-    ].join('\n');
-  };
-
-  return iter(value, 1);
+  return [
+    openSymbol,
+    ...lines,
+    `${bracketIndent}${closeSymbol}`,
+  ].join('\n');
 };
 
-const processKey = (node) => `${prefixes[node.type]} ${node.name}`;
+const addPrefix = (key, type, indent) => `${indent}${prefixes[type]} ${key}`;
+
 const formatStylish = (diffTree) => {
-  const reducer = (acc, node) => {
-    switch (node.type) {
-      case 'added':
-        return { ...acc, [processKey(node)]: node.value2 };
+  const iter = (tree, depth) => tree.flatMap((node) => {
+    const {
+      type, name, value1, value2, children,
+    } = node;
+
+    const indentSize = depth * keyOffset;
+    const keyIndent = indentSymbol.repeat(indentSize - prefixOffset);
+    const bracketIndent = indentSymbol.repeat(indentSize);
+    const toStr = (value) => stringify(value, depth + 1);
+
+    switch (type) {
       case 'deleted':
-        return { ...acc, [processKey(node)]: node.value1 };
-      case 'unchanged':
-        return { ...acc, [processKey(node)]: node.value1 };
+        return `${addPrefix(name, type, keyIndent)}: ${toStr(value1)}`;
+      case 'added':
+        return `${addPrefix(name, type, keyIndent)}: ${toStr(value2)}`;
       case 'changed':
-        return { ...acc, [`${prefixes.deleted} ${node.name}`]: node.value1, [`${prefixes.added} ${node.name}`]: node.value2 };
+        return [
+          `${addPrefix(name, 'deleted', keyIndent)}: ${toStr(value1)}`,
+          `${addPrefix(name, 'added', keyIndent)}: ${toStr(value2)}`,
+        ];
+      case 'unchanged':
+        return `${addPrefix(name, type, keyIndent)}: ${toStr(value2)}`;
       case 'nested':
-        return { ...acc, [processKey(node)]: node.children.reduce(reducer, {}) };
+        return [
+          `${addPrefix(name, type, keyIndent)}: ${openSymbol}`,
+          ...iter(children, depth + 1),
+          `${bracketIndent}${closeSymbol}`,
+        ];
       default:
-        throw new Error(`Unknown type of node: '${node.type}'!`);
+        throw new Error(`Unexpected node type ${type}`);
     }
-  };
-  const treeObj = diffTree.reduce(reducer, {});
-  return stringify(treeObj, ' ', 4);
+  });
+
+  const lines = iter(diffTree, 1);
+
+  return [openSymbol, ...lines, closeSymbol].join('\n');
 };
 
 export default formatStylish;

@@ -15,23 +15,26 @@ const expectedStylish = readFile('expected.stylish').trim();
 const expectedPlain = readFile('expected.plain').trim();
 const expectedJson = readFile('expected.json');
 
-const cases = [['json', 'stylish', expectedStylish],
-  ['yaml', 'stylish', expectedStylish],
-  ['ini', 'stylish', expectedStylish],
-  ['json', undefined, expectedStylish],
-  ['json', 'plain', expectedPlain],
-  ['yaml', 'plain', expectedPlain],
-  ['ini', 'plain', expectedPlain],
-  ['yaml', 'json', expectedJson],
-  ['json', 'json', expectedJson],
-  ['ini', 'json', expectedJson]];
+const inputFormats = ['json', 'ini', 'yaml'];
 
-describe('compares two configuration files', () => {
-  test.each(cases)(
-    'file1 and file2 %p as format, formatter %p',
-    (format, formatterName, expectedResult) => {
-      const result = gendiff(getFixturePath(`file1.${format}`), getFixturePath(`file2.${format}`), formatterName);
-      expect(result).toEqual(expectedResult);
-    },
-  );
-});
+const outputFormats = ['stylish', 'plain', 'json', undefined];
+
+const formatterDataMap = {
+  stylish: expectedStylish,
+  plain: expectedPlain,
+  json: expectedJson,
+  undefined: expectedStylish,
+};
+
+describe.each(inputFormats)('compares two configuration files as %s format',
+  (inputFormat) => {
+    const path1 = getFixturePath(`file1.${inputFormat}`);
+    const path2 = getFixturePath(`file2.${inputFormat}`);
+    test.each(outputFormats)(
+      'Output %s format',
+      (formatterName) => {
+        const result = gendiff(path1, path2, formatterName);
+        expect(result).toEqual(formatterDataMap[formatterName]);
+      },
+    );
+  });
