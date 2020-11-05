@@ -42,17 +42,39 @@ $ make help
 ### Flat JSON
 
 #### before.json
+```sh
 {
   "host": "hexlet.io",
   "timeout": 50,
   "proxy": null,
   "follow": false
 }
+```
 #### after.json
+```sh
 {
   "timeout": 20,
   "verbose": true,
   "host": "hexlet.io"
 }
+```
 [![asciicast](https://asciinema.org/a/HwVKz5qVP8iKsqtEYJJWyHU1N.svg)](https://asciinema.org/a/HwVKz5qVP8iKsqtEYJJWyHU1N)
 
+
+### Flat YAML
+
+#### before.yaml
+
+```sh
+host: hexlet.io
+timeout: 50
+proxy: null
+follow: false
+```
+#### after.yaml
+```sh
+timeout: 20
+verbose: true
+host: hexlet.io
+```
+[![asciicast](https://asciinema.org/a/qU4OOliLBOIzpyYUJk6KAXooK.svg)](https://asciinema.org/a/qU4OOliLBOIzpyYUJk6KAXooK)
