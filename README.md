@@ -39,3 +39,20 @@ $ make help
 ### Info Output
 [![asciicast](https://asciinema.org/a/4LULNCyww7lLRvZYD7CUWfT5Y.svg)](https://asciinema.org/a/4LULNCyww7lLRvZYD7CUWfT5Y)
 
+### Flat JSON
+
+#### before.json
+{
+  "host": "hexlet.io",
+  "timeout": 50,
+  "proxy": null,
+  "follow": false
+}
+#### after.json
+{
+  "timeout": 20,
+  "verbose": true,
+  "host": "hexlet.io"
+}
+[![asciicast](https://asciinema.org/a/HwVKz5qVP8iKsqtEYJJWyHU1N.svg)](https://asciinema.org/a/HwVKz5qVP8iKsqtEYJJWyHU1N)
+
