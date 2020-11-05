@@ -78,3 +78,107 @@ verbose: true
 host: hexlet.io
 ```
 [![asciicast](https://asciinema.org/a/qU4OOliLBOIzpyYUJk6KAXooK.svg)](https://asciinema.org/a/qU4OOliLBOIzpyYUJk6KAXooK)
+
+
+
+### Flat INI
+
+#### before.ini
+
+```sh
+host=hexlet.io
+timeout=50
+proxy=null
+follow=false
+```
+#### after.ini
+```sh
+timeout=20
+verbose=true
+host=hexlet.io
+```
+[![asciicast](https://asciinema.org/a/OhUoYNycfLEwInRHefeRV8Njr.svg)](https://asciinema.org/a/OhUoYNycfLEwInRHefeRV8Njr)
+
+### Multi-level configuration files
+
+#### file1.json
+```sh
+{
+  "common": {
+    "setting1": "Value 1",
+    "setting2": 200,
+    "setting3": true,
+    "setting6": {
+      "key": "value",
+      "doge": {
+        "wow": ""
+      }
+    }
+  },
+  "group1": {
+    "baz": "bas",
+    "foo": "bar",
+    "nest": {
+      "key": "value"
+    }
+  },
+  "group2": {
+    "abc": 12345,
+    "deep": {
+      "id": 45
+    }
+  }
+}
+```
+
+#### file2.json
+```sh
+{
+  "common": {
+    "follow": false,
+    "setting1": "Value 1",
+    "setting3": null,
+    "setting4": "blah blah",
+    "setting5": {
+      "key5": "value5"
+    },
+    "setting6": {
+      "key": "value",
+      "ops": "vops",
+      "doge": {
+        "wow": "so much"
+      }
+    }
+  },
+  "group1": {
+    "foo": "bar",
+    "baz": "bars",
+    "nest": "str"
+  },
+  "group3": {
+    "fee": 100500,
+    "deep": {
+      "id": {
+        "number": 45
+      }
+    }
+  }
+}
+```
+
+### Stylish treelike format
+
+[![asciicast](https://asciinema.org/a/gk9s8c1B0nu1nLNHl27FHhpHS.svg)](https://asciinema.org/a/gk9s8c1B0nu1nLNHl27FHhpHS)
+
+
+
+### Plain format
+
+[![asciicast](https://asciinema.org/a/Q9ZYM6yHPZAl0D5gCdbTAmtoj.svg)](https://asciinema.org/a/Q9ZYM6yHPZAl0D5gCdbTAmtoj)
+
+
+
+### JSON format
+
+[![asciicast](https://asciinema.org/a/Oc2Cfq45vyiD0Mm99gGAdgdHq.svg)](https://asciinema.org/a/Oc2Cfq45vyiD0Mm99gGAdgdHq)
+
