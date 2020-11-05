@@ -36,5 +36,6 @@ $ make help
 -------------------------
 ## Example
 
-### Setup
-[![asciicast](https://asciinema.org/a/gzRi0O4I7SPeUlgDvFDy7QMea.svg)](https://asciinema.org/a/gzRi0O4I7SPeUlgDvFDy7QMea)
+### Info Output
+[![asciicast](https://asciinema.org/a/4LULNCyww7lLRvZYD7CUWfT5Y.svg)](https://asciinema.org/a/4LULNCyww7lLRvZYD7CUWfT5Y)
+
